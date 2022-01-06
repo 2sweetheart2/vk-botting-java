@@ -37,11 +37,7 @@ public class HttpsRequsts {
             wr.writeBytes(params);
             wr.flush();
         }
-        System.out.println(url+" | "+params);
         int responseCode = httpClient.getResponseCode();
-        System.out.println("\nSending 'POST' request to URL : " + url);
-        System.out.println("Post parameters : " + params);
-        System.out.println("Response Code : " + responseCode);
         try (BufferedReader in = new BufferedReader(
                 new InputStreamReader(httpClient.getInputStream()))) {
             String line;
@@ -69,8 +65,6 @@ public class HttpsRequsts {
 //        httpClient.setRequestProperty("User-Agent", "VKAndroidApp/4.13.1-1206 (Android 4.4.3; SDK 19; armeabi; ; ru)");
 //        httpClient.setRequestProperty("Accept","image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, audio/mp3 */*");
         int responseCode = httpClient.getResponseCode();
-        System.out.println("Response Code : " + responseCode);
-        System.out.println("Url : "+url);
         try (BufferedReader in = new BufferedReader(
                 new InputStreamReader(httpClient.getInputStream()))) {
             StringBuilder response = new StringBuilder();
@@ -93,10 +87,11 @@ public class HttpsRequsts {
                     Message msg = (Message) obj;
                     String params = ObjectToParams.castMessageToParams(msg);
                     sendPost(method, params, callback);
+                    break;
                 }
                 case "groups.getLongPollServer": {
-                    String params = ObjectToParams.getLongPollServer();
-                    sendPost(method,params,callback);
+                    sendPost(method,(String) obj,callback);
+                    break;
                 }
             }
         } catch (IOException e) {

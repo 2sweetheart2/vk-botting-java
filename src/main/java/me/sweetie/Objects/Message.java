@@ -1,39 +1,84 @@
 package me.sweetie.Objects;
 
+import com.google.gson.annotations.SerializedName;
+import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.Collections;
+
 public class Message {
-    private String message;
+
+    @SerializedName("text")
+    private String text;
+    @SerializedName("peer_id")
     private int peerId;
-    private int replyTo;
+    @SerializedName("date")
+    private long date;
+    @SerializedName("important")
+    private boolean important;
+    @SerializedName("from_id")
     private int fromId;
+    @SerializedName("attachments")
+    private Object[] attachments;
+    @SerializedName("is_hidden")
+    private boolean isHidden;
+    @SerializedName("fwd_messages")
+    private Object[] fwdMessages;
+    @SerializedName("id")
+    private int id;
+    @SerializedName("conversation_message_id")
+    private int convMessageId;
 
-    public void setFromId(int fromId){
-        this.fromId = fromId;
-    }
 
-    public int getFromId(){
-        return fromId;
-    }
 
-    public void setReplyTo(int replyMessageId){
-        replyTo=replyMessageId;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
+    public void setText(String message) {
+        this.text = message;
     }
     public void setPeerId(int peerId){
         this.peerId = peerId;
     }
+    public void setConvMessageId(int id){
+        this.convMessageId = id;
+    }
 
-    public String getMessage() {
-        return message;
+
+    public String getText() {
+        return text;
     }
 
     public int getPeerId() {
         return peerId;
     }
 
-    public int getReplyTo() {
-        return replyTo;
+    public long getDate(){
+        return date;
+    }
+
+    public boolean isImportant(){
+        return important;
+    }
+
+    public int getFromId(){
+        return fromId;
+    }
+    public Object[] getAttachments(){
+        return attachments;
+    }
+    public Object[] getFwdMessages(){
+        return fwdMessages;
+    }
+    public boolean isHidden(){
+        return isHidden;
+    }
+    public int getId(){
+        return id;
+    }
+    public int getConvMessageId(){
+        return convMessageId;
+    }
+
+    public void setReply(Message message) {
+        setPeerId(message.getPeerId());
+        fwdMessages = Collections.singletonList(new JSONObject(String.format("{\"peer_id\":%s,\"is_reply\":\"%s\",\"conversation_message_ids\":%s}", message.getPeerId(), getText(), message.getConvMessageId()))).toArray();
     }
 }

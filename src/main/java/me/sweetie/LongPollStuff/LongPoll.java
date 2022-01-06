@@ -1,8 +1,5 @@
 package me.sweetie.LongPollStuff;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import me.sweetie.main.Bot;
 import me.sweetie.requsts.HttpsRequsts;
 import org.json.JSONArray;
@@ -12,15 +9,13 @@ import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 
-public class LongPoll {
-    private static Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+public class LongPoll extends EventHandler {
     private String key = null;
     private static String addres = null;
     private String ts;
-    private boolean isRunning;
 
-    public LongPoll() {
-        HttpsRequsts.method("groups.getLongPollServer", null, (response, code) -> {
+    public LongPoll(String token,int group_id) {
+        HttpsRequsts.method("groups.getLongPollServer", "access_token="+token+"&group_id="+group_id+"&v="+5.999, (response, code) -> {
             JSONObject response_ = response.getJSONObject("response");
             addres = response_.getString("server");
             key = response_.getString("key");
@@ -36,6 +31,7 @@ public class LongPoll {
                     try {
                         handleUpdates();
                     } catch (Exception e) {
+                        e.printStackTrace();
                         run();
                     }
                 }
@@ -46,25 +42,25 @@ public class LongPoll {
         if (addres == null)
             Bot.log.log(Level.WARNING, "Getting LongPoll server was failed");
 
-        isRunning = true;
-
         Bot.log.info("LongPoll handler started to handle events");
         try {
-            while (isRunning) {
+            while (true) {
                 HttpsRequsts.sendPost("getLongPollServices/" + addres, "key=" + key + "&act=a_check&ts=" + ts + "&wait=" + 10, (response, code) -> {
-                    ts = response.getString("ts");
-                    System.out.println();
-//                    крч надо теперь эту херь за кастить в Event и потом запустить .parse();
-//                    for(Object o : response.getJSONArray("updates")) {
-//                        gson.fromJson((JsonObject) o, Event.class).parse();
-//                    }
+                    if (!ts.equals(response.getString("ts"))) {
+                        ts = response.getString("ts");
+                        JSONArray a = response.getJSONArray("updates");
+                        for (int i = 0; i < a.length(); i++) {
+                            JSONObject a_ = (JSONObject) a.get(i);
+                            parse(a_.getString("type"), a_.getJSONObject("object"));
+
+                        }
+                    }
                 });
             }
         } catch (IOException e) {
             Bot.log.info("LongPoll handler stopped to handle events");
             e.printStackTrace();
         }
-        isRunning = false;
     }
 
     public static String getAddres() {

@@ -1,36 +1,35 @@
 package me.sweetie.main;
 
 import com.sun.istack.internal.NotNull;
-import me.sweetie.LongPollStuff.Event;
-import me.sweetie.LongPollStuff.LongPoll;
 import me.sweetie.Objects.Message;
 import me.sweetie.requsts.HttpsRequsts;
 
 import java.util.logging.Logger;
 
-public class Bot extends Event {
+public class Bot {
     private static String TOKEN;
     private static Integer ID;
-    private LongPoll longPoll = null;
     public static Logger log = Logger.getLogger(Bot.class.getName());
-    public Bot(int id, @NotNull String token){
+    public static String PREFIX = null;
+
+    public Bot(int id, @NotNull String token, String prefix) {
         TOKEN = token;
         ID = id;
-        //run(ID);
-        longPoll = new LongPoll();
-
+        PREFIX = prefix;
     }
 
-    public static String getToken(){
+    public static String getToken() {
         return TOKEN;
     }
-    public static Integer getId(){
+
+    public static Integer getId() {
         return ID;
     }
 
-    public void sendMessage(Message message){
-        message.setFromId(ID);
-        HttpsRequsts.method("messages.send",message,(response, code) -> {});
+    public boolean sendMessage(Message message) {
+        HttpsRequsts.method("messages.send", message, (response, code) -> {
+        });
+        return true;
     }
 
 

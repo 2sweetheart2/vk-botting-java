@@ -7,12 +7,9 @@ public class ObjectToParams {
     private static final String token = Bot.getToken();
     private static final Float v = 5.999f;
     public static String castMessageToParams(Message message){
-        return addStaticalParams("message=" + message.getMessage() + '&' + "peer_ids=" + message.getPeerId()+'&'+"random_id=0"+'&'+"reply_to="+message.getReplyTo());
+        return addStaticalParams("message=" + message.getText() + '&' + "peer_ids=" + message.getPeerId()+'&'+"random_id=0"+'&'+"forward="+message.getFwdMessages()[0]);
     }
 
-    public static String getLongPollServer(){
-        return addStaticalParams("group_id="+Bot.getId());
-    }
     private static String addStaticalParams(String params){
         return "access_token="+ token+ '&'+"v="+v+'&'+params;
     }
