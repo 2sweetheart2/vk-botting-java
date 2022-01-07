@@ -1,8 +1,8 @@
 package me.sweetie.requsts;
 
+import me.sweetie.Interfaces.ProcessOutput;
 import me.sweetie.LongPollStuff.LongPoll;
 import me.sweetie.Objects.Message;
-import me.sweetie.Interfaces.ProcessOutput;
 import me.sweetie.Utils.ObjectToParams;
 import me.sweetie.main.Bot;
 import org.json.JSONException;
@@ -16,15 +16,14 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class HttpsRequsts {
 
 
     public static void sendPost(String method, String params, ProcessOutput callback) throws IOException {
-        String url = "https://api.vk.com/method/"+method;
-        if(method.equals("getLongPollServices/"+ LongPoll.getAddres())){
+        String url = "https://api.vk.com/method/" + method;
+        if (method.equals("getLongPollServices/" + LongPoll.getAddres())) {
             url = LongPoll.getAddres();
         }
         HttpsURLConnection httpClient = (HttpsURLConnection) new URL(url).openConnection();
@@ -46,18 +45,18 @@ public class HttpsRequsts {
                 response.append(line);
             }
             JSONObject res = new JSONObject(response.toString());
-            if(res.has("error")){
-                Bot.log.log(Level.WARNING,res.getJSONObject("error").getString("error_msg"));
+            if (res.has("error")) {
+                Bot.log.log(Level.WARNING, res.getJSONObject("error").getString("error_msg"));
                 return;
             }
-            callback.procesJson(res,responseCode);
+            callback.procesJson(res, responseCode);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public static void sendGet(String method, ProcessOutput callback, Object...params) throws IOException {
-        String url = "https://api.vk.com/method/"+method;
+    public static void sendGet(String method, ProcessOutput callback, Object... params) throws IOException {
+        String url = "https://api.vk.com/method/" + method;
         HttpURLConnection httpClient =
                 (HttpURLConnection) new URL(url).openConnection();
         httpClient.setRequestMethod("GET");
@@ -80,7 +79,7 @@ public class HttpsRequsts {
         }
     }
 
-    public static void method(String method,Object obj,ProcessOutput callback) {
+    public static void method(String method, Object obj, ProcessOutput callback) {
         try {
             switch (method) {
                 case "messages.send": {
@@ -90,7 +89,7 @@ public class HttpsRequsts {
                     break;
                 }
                 case "groups.getLongPollServer": {
-                    sendPost(method,(String) obj,callback);
+                    sendPost(method, (String) obj, callback);
                     break;
                 }
             }

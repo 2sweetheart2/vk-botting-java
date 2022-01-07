@@ -10,12 +10,10 @@ public class Bot {
     private static String TOKEN;
     private static Integer ID;
     public static Logger log = Logger.getLogger(Bot.class.getName());
-    public static String PREFIX = null;
 
-    public Bot(int id, @NotNull String token, String prefix) {
+    public Bot(int id, @NotNull String token) {
         TOKEN = token;
         ID = id;
-        PREFIX = prefix;
     }
 
     public static String getToken() {
@@ -31,6 +29,9 @@ public class Bot {
         });
         return true;
     }
+
+
+
 
 
 }

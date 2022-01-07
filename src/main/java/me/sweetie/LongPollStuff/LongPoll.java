@@ -1,5 +1,6 @@
 package me.sweetie.LongPollStuff;
 
+import me.sweetie.Interfaces.Callback;
 import me.sweetie.main.Bot;
 import me.sweetie.requsts.HttpsRequsts;
 import org.json.JSONArray;
@@ -20,7 +21,6 @@ public class LongPoll extends EventHandler {
             addres = response_.getString("server");
             key = response_.getString("key");
             ts = response_.getString("ts");
-            System.out.println(response_);
             run();
         });
     }
@@ -67,5 +67,7 @@ public class LongPoll extends EventHandler {
         return addres;
     }
 
-
+    public void onCommand(String command, Callback callback){
+        regCommand(command,callback);
+    }
 }
