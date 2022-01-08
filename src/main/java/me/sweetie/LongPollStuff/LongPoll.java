@@ -15,6 +15,7 @@ public class LongPoll extends EventHandler {
     private static String addres = null;
     private String ts;
 
+
     public LongPoll(String token,int group_id) {
         HttpsRequsts.method("groups.getLongPollServer", "access_token="+token+"&group_id="+group_id+"&v="+5.999, (response, code) -> {
             JSONObject response_ = response.getJSONObject("response");
