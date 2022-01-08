@@ -1,5 +1,5 @@
-# vk_botting-java
-vk_botting-java is a basic package to build async VK chatbots
+# vk-botting-java
+vk-botting-java is a basic package to build async VK chatbots
 
 this library is not finished yet and may have some errors or may not fully implement all the features of the VK API.
 
