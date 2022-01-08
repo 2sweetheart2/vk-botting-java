@@ -1,8 +1,6 @@
 package me.sweetie.Objects;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.google.gson.annotations.SerializedName;
 import org.json.JSONObject;
 
@@ -29,13 +27,16 @@ public class Message {
     @SerializedName("conversation_message_id")
     private int convMessageId;
 
-    private KeyBoard keyBoard;
+    private KeyBoard keyBoard = null;
+    private JSONObject botForwardMessage;
+
 
     public void setKeyBoard(KeyBoard keyBoard) {
         this.keyBoard = keyBoard;
     }
 
     public String getKeyBoard() {
+        if(keyBoard == null) return null;
         JSONObject keyboard = new JSONObject();
         keyboard.put("one_time", this.keyBoard.getOneTime());
         keyboard.put("buttons", this.keyBoard.getButtonsAsJson());
@@ -85,6 +86,9 @@ public class Message {
     public Object getFwdMessages() {
         return fwdMessages;
     }
+    public Object getBotFwdMessage(){
+        return botForwardMessage;
+    }
 
     public boolean isHidden() {
         return isHidden;
@@ -100,9 +104,7 @@ public class Message {
 
     public void setReply(Message message) {
         setPeerId(message.getPeerId());
-        JsonElement j = new JsonParser().parse((String.format("{\"peer_id\":%s,\"is_reply\":\"%s\",\"conversation_message_ids\":%s}", message.getPeerId(), getText(), message.getConvMessageId()))).getAsJsonObject();
-        JsonArray j_ = new JsonArray();
-        j_.add(j);
-        fwdMessages = j_;
+        JSONObject j =new JSONObject(String.format("{\"peer_id\":%s,\"is_reply\":\"%s\",\"conversation_message_ids\":%s}", message.getPeerId(), getText(), message.getConvMessageId()));
+        botForwardMessage = j;
     }
 }

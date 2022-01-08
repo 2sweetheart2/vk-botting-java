@@ -17,13 +17,12 @@ public class ObjectToParams {
         } else text.append("message=").append(message.getText()).append("&");
         if (message.getPeerId() < 1000000000) return "incorrect peer id";
         else text.append("peer_ids=").append(message.getPeerId()).append("&");
-        if (message.getFwdMessages() != null)
-            text.append("forward=").append(message.getFwdMessages().toString()).append('&');
+        if (message.getBotFwdMessage() != null)
+            text.append("forward=").append(message.getBotFwdMessage().toString()).append('&');
         if (message.getAttachments() != null)
             text.append("attachment=").append(message.getAttachments().toString()).append('&');
         if (message.getKeyBoard() != null) text.append("keyboard=").append(message.getKeyBoard()).append('&');
         text.append("random_id=0");
-
         return addStaticalParams(text.toString());
     }
 
