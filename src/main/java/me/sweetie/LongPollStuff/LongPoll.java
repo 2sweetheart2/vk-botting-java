@@ -1,6 +1,5 @@
 package me.sweetie.LongPollStuff;
 
-import me.sweetie.Interfaces.Callback;
 import me.sweetie.main.Bot;
 import me.sweetie.requsts.HttpsRequsts;
 import org.json.JSONArray;
@@ -16,8 +15,8 @@ public class LongPoll extends EventHandler {
     private String ts;
 
 
-    public LongPoll(String token,int group_id) {
-        HttpsRequsts.method("groups.getLongPollServer", "access_token="+token+"&group_id="+group_id+"&v="+5.999, (response, code) -> {
+    public LongPoll(String token, int group_id) {
+        HttpsRequsts.method("groups.getLongPollServer", "access_token=" + token + "&group_id=" + group_id + "&v=" + 5.999, (response, code) -> {
             JSONObject response_ = response.getJSONObject("response");
             addres = response_.getString("server");
             key = response_.getString("key");
@@ -40,9 +39,11 @@ public class LongPoll extends EventHandler {
     }
 
     private void handleUpdates() {
-        if (addres == null)
+        if (addres == null) {
             Bot.log.log(Level.WARNING, "Getting LongPoll server was failed");
-
+            return;
+        }
+        onReady();
         Bot.log.info("LongPoll handler started to handle events");
         try {
             while (true) {
@@ -68,7 +69,10 @@ public class LongPoll extends EventHandler {
         return addres;
     }
 
-    public void onCommand(String command, Callback callback){
-        regCommand(command,callback);
+    public void onCommand(String command) {
+        regCommand(command);
+    }
+
+    protected void onReady() {
     }
 }

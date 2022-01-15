@@ -11,16 +11,28 @@ import java.util.logging.Logger;
 public class Bot {
     private static String TOKEN;
     private static Integer ID;
+    private static String PREFIX;
     public static Logger log = Logger.getLogger(Bot.class.getName());
     private static boolean flag = false;
 
-    public Bot(int id, @NotNull String token) {
+    public Bot(int id, @NotNull String token, String PREFIX) {
         TOKEN = token;
         ID = id;
+        setPREFIX(PREFIX);
     }
 
     public void setBreakAfterCommand(boolean flag) {
         this.flag = flag;
+    }
+
+    private boolean setPREFIX(String prefix) {
+        if (PREFIX != null) return false;
+        PREFIX = prefix;
+        return true;
+    }
+
+    public static String getPREFIX() {
+        return PREFIX;
     }
 
     public static boolean getBreakAfterCommand() {
