@@ -69,9 +69,6 @@ public class LongPoll extends EventHandler {
         return addres;
     }
 
-    public void onCommand(String command) {
-        regCommand(command);
-    }
 
     protected void onReady() {
     }

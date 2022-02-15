@@ -6,33 +6,33 @@ import me.sweetie.Objects.Message;
 import me.sweetie.requsts.HttpsRequsts;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class Bot {
     private static String TOKEN;
     private static Integer ID;
-    private static String PREFIX;
+    private static List<String> PREFIXS;
     public static Logger log = Logger.getLogger(Bot.class.getName());
     private static boolean flag = false;
 
-    public Bot(int id, @NotNull String token, String PREFIX) {
+    public Bot(int id, @NotNull String token, List<String> PREFIXS) {
         TOKEN = token;
         ID = id;
-        setPREFIX(PREFIX);
+        setPREFIX(PREFIXS);
     }
 
     public void setBreakAfterCommand(boolean flag) {
         this.flag = flag;
     }
 
-    private boolean setPREFIX(String prefix) {
-        if (PREFIX != null) return false;
-        PREFIX = prefix;
+    private boolean setPREFIX(List<String> prefixs) {
+        PREFIXS = prefixs;
         return true;
     }
 
-    public static String getPREFIX() {
-        return PREFIX;
+    public static List<String> getPREFIXS() {
+        return PREFIXS;
     }
 
     public static boolean getBreakAfterCommand() {

@@ -1,6 +1,7 @@
 package me.sweetie.LongPollStuff;
 
 import com.google.gson.Gson;
+import me.sweetie.Interfaces.Callback;
 import me.sweetie.Objects.*;
 import me.sweetie.main.Bot;
 import org.json.JSONObject;
@@ -106,11 +107,17 @@ public class EventHandler {
                     }
                     break;
                 }
-                if (m.getText().startsWith(Bot.getPREFIX())) {
-                    String r = Search(m.getText().replace(Bot.getPREFIX(), ""));
-                    if (r != null) onCommand(currentMessage, r, currentCommand.replace(r, "").split("\\s+"));
+                boolean flag = false;
+                for (String i : Bot.getPREFIXS()) {
+                    if (m.getText().startsWith(i)) {
+                        Callback r = Search(m.getText().replace(i, ""));
+                        if (r != null) {r.cumback(m, args);flag = true;}
+                        break;
+                    }
                 }
-                if (!Bot.getBreakAfterCommand()) onMessageNew(m);
+                if (flag && !Bot.getBreakAfterCommand())
+                    onMessageNew(m);
+                else onMessageNew(m);
                 break;
             }
             case "message_typing_state": {
@@ -169,27 +176,29 @@ public class EventHandler {
         return "ok";
     }
 
+    private String[] args;
     private String currentCommand;
 
-    private String _Search(HashMap<String, Object> map, String[] msg) {
+    private Callback _Search(HashMap<String, Object> map, String[] msg) {
         if (msg.length > 0 && map.containsKey(msg[0])) {
-            String res = _Search((HashMap<String, Object>) map.get(msg[0]), Arrays.copyOfRange(msg, 1, msg.length));
+            Callback res = _Search((HashMap<String, Object>) map.get(msg[0]), Arrays.copyOfRange(msg, 1, msg.length));
             if (res != null) {
                 return res;
             }
         }
         if (map.containsKey("")) {
-            return (String) map.get("");
+            args = msg;
+            return (Callback) map.get("");
         }
         return null;
     }
 
-    private String Search(String name) {
+    private Callback Search(String name) {
         currentCommand = name;
-        return _Search(commands, name.split("\\s+"));
+        return _Search(commands, Arrays.copyOfRange(name.split("\\s+"), 0, name.split("\\s+").length));
     }
 
-    private void _AddCommand(HashMap<String, Object> map, String[] name, String command) {
+    private void _AddCommand(HashMap<String, Object> map, String[] name, Callback command) {
         if (name.length == 0) {
             map.put("", command);
             return;
@@ -200,14 +209,13 @@ public class EventHandler {
         _AddCommand((HashMap<String, Object>) map.get(name[0]), Arrays.copyOfRange(name, 1, name.length), command);
     }
 
-    private void AddCommand(String name, String command) {
+    private void AddCommand(String name, Callback command) {
         _AddCommand(commands, name.split("\\s+"), command);
     }
 
 
-    protected void regCommand(String command) {
-
-        this.AddCommand(command, command);
+    protected void regCommand(String command, Callback callback) {
+        this.AddCommand(command, callback);
     }
 
 }

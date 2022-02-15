@@ -15,8 +15,7 @@ public class ObjectToParams {
             Bot.log.log(Level.WARNING, "the message must have the text");
             return "false";
         } else text.append("message=").append(message.getText()).append("&");
-        if (message.getPeerId() < 1000000000) return "incorrect peer id";
-        else text.append("peer_ids=").append(message.getPeerId()).append("&");
+        text.append("peer_ids=").append(message.getPeerId()).append("&");
         if (message.getBotFwdMessage() != null)
             text.append("forward=").append(message.getBotFwdMessage().toString()).append('&');
         if (message.getAttachments() != null)
